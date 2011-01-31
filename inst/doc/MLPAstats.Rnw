@@ -1,0 +1,419 @@
+%\VignetteIndexEntry{MLPAstats}
+\documentclass[a4paper]{article}
+\usepackage{textcomp}
+\usepackage{Sweave}
+\title{MLPAstats User's Guide}
+\author{Alejandro C\'{a}ceres and Juan R. Gonz\'{a}lez}
+\begin{document}
+\maketitle
+
+
+\begin{center}
+
+Center for Research in Environmental Epidemiology (CREAL)\\
+Institut Municipal d'Investigaci\'o M\`edica (IMIM)
+
+\vspace{1cm}
+
+{\tt jrgonzalez@creal.cat} \\
+{\tt http://www.creal.cat/jrgonzalez/software.htm}
+
+\end{center}
+
+
+\tableofcontents
+
+
+
+\abstract{\noindent MLPAstats is software, written in R, design for the analysis of differences in 
+ CNVs using multiplex-dependent probe amplification (MLPA) data. It is freely 
+available from http://www.bioconductor.org and its 
+methods are presented in \cite{jrg1}. The software is provided with a graphical user interface (GUI) that facilitates 
+its use, in particular, for those not familiar with R. Here we present a step-by-step 
+analysis of the data studied in reference \cite{jrg1}. }
+
+\section{Installation}
+MLPA stats is written for R 2.9.0, which itself can be downloaded from the R website http://www.r$-$project.org.
+MLPA software in turn can be obtained from  http://www.creal.cat/jrgonzalez/software.html. The package is installed using:
+
+\begin{verbatim}
+> install.packages("MLPAstats_0.5-5.tar.gz",repos=NULL) 
+\end{verbatim}
+
+\noindent You can load the package on R by typing
+<<>>=
+library(MLPAstats)
+@
+
+
+MLPAstats functions can be accessed by a GUI that is opened with the instruction 
+<<>>=
+gui.mlpa()
+@
+This launches MLPAstats main window as shown in figure (\ref{win}).
+   
+\begin{figure}[h]
+\begin{picture}(150,200)(0,0)
+\put(70,-40){{\resizebox{7cm}{!}{\includegraphics{figures/picture1.pdf}}}}
+\end{picture}
+\caption{MLPAstats main GUI window.}
+\label{win}
+\end{figure}
+
+\section{Loading Demo} 
+A sample data can be found in the File menu under the ``load demo'' option (figure \ref{brca}). 
+This is data from a breast cancer study (P002 BRCA1) provided by NGRL-Manchester.  
+It consists on a collection of 34 probes for 10 case and 5 control samples. 
+Nine of the probes are used as control probes for the normalization step.
+
+\begin{figure}[h]
+\begin{picture}(150,200)(0,0)
+\put(70,-40){{\resizebox{7cm}{!}{\includegraphics{figures/picture2.pdf}}}}
+\end{picture}
+\caption{Selection of BRCA demo.}
+\label{brca}
+\end{figure}
+
+
+<<echo=FALSE>>=
+#	data(BRCA)
+data(BRCA)
+Ms<-list()
+Ms$mlpa$arg.mlpa$cont.dat<-BRCAcontrols
+Ms$mlpa$arg.mlpa$test.dat<-BRCAtests
+Ms$mlpa$arg.mlpa$size.dat<-size
+Ms$mlpa$arg.mlpa$probe.dat<-probes.control
+@
+
+Loading the data will create an Ms.R file, where the results of your session 
+will be stored. Beforehand, you can change the current directory with 
+``change dir'' to the path in which you would like to save that file.   
+
+<<echo=FALSE>>=
+attach(Ms$mlpa$arg.mlpa)
+Ms$mlpa$mlpa.dat<-setupMLPA(cont.dat,test.dat,size.dat,probe.dat)
+detach(Ms$mlpa$arg.mlpa)
+@
+
+\subsection{Exploring the Ms object} 
+This section illustrates how data is loaded onto R. It is not required for the analysis 
+but it will give you an understanding of the data structure. We explore it by using the R command 
+line. 
+
+BRCA data is loaded into an Ms variable that contains all the experimental information 
+needed to begin analysis. Type in the command line
+<<>>=
+getInfo()
+
+@
+which gives you the status of the Ms variable. When data is loaded Ms is initialized with:
+ 
+\begin{enumerate}
+\item {\bf control and test data:} In our example, we have data for 34 probes 5 
+of wich are control probes
+<<>>=
+getProbes()
+getProbesControl()
+@
+A closer look to one of the probes shows the values for each subject across 
+all control and test subjects
+
+<<>>= 
+getPeaks("C5q31", "controls")
+getPeaks("C5q31", "tests")
+@ 
+
+\item {\bf probe size:} Each probe requires its size measure for the normalization step,
+for BRCA data:
+<<>>= 
+getSize()
+@
+\end{enumerate}
+
+\begin{figure}[h]
+\begin{picture}(150,200)(0,0)
+\put(70,-40){{\resizebox{7cm}{!}{\includegraphics{figures/picture3.pdf}}}}
+\end{picture}
+\caption{Option fields for making your own Ms.}
+\label{Ms}
+\end{figure}
+
+\subsection{Making you own Ms}
+The steps in this secition have been all automatically set up when you loaded the BRCA demo. 
+If you are following a quick demo you can proceed to the next section, but should come back
+when trying your own data.
+For initiallizing the Ms file with your data, you can enter all the required information from 
+text files; figure(\ref{Ms}). The option ``control and test data'' directs you to select the data 
+files for the control and test samples. MLPAstats package provides samples of such files for the BRCA data. 
+For the this example, you can select the option  and follow the dialog to browse on your local directory 
+for paper.control.text and paper.test.txt. 
+
+Note that these are text files with data in the format
+
+\begin{verbatim}
+Sample Replica RNAseP.1 HIRA UBE3A.9EX ...
+NA.HMP05.a2 A 13220 9108 10644 ...
+NA.HMP05.a2 B 13028 9891 10673 ... 
+...
+\end{verbatim}
+where the first row is the sample, replica and probe names and data is entered 
+separated by single spaces. Make sure your own files follow this convention; in particualr,
+have in mind reserving the first two columns for sample names and replicas, 
+even if you do not have any.  
+
+Now you need to specify which of these probes are controls. They can be provided 
+interactively or with a text file. The interactive option is under ``select'' 
+on the ``control probes'' submenu; figure (\ref{sel1}). The main window, figure (\ref{sel2}),
+displays the variable names to be selected as control probes.
+
+\begin{figure}[h]
+\begin{picture}(150,200)(0,0)
+\put(70,-40){{\resizebox{7cm}{!}{\includegraphics{figures/picture4.pdf}}}}
+\end{picture}
+\caption{option to select control probes.}
+\label{sel1}
+\end{figure}
+
+For BRCA data, click on the names that correspond to the control probes (those starting with C) and 
+then double-click on the OK text. 
+
+\begin{figure}[h]
+\begin{picture}(150,200)(0,0)
+\put(70,-40){{\resizebox{7cm}{!}{\includegraphics{figures/picture5.pdf}}}}
+\end{picture}
+\caption{Probe selection for BCRA data.}
+\label{sel2}
+\end{figure}
+
+If the control probes are entered from a text file, a list of probes numbers
+corresponding to the controls should be written on a row separated by single spaces. 
+A sample of such file is control.probes.txt, that can be selected using the ``from file'' 
+option.  
+
+You can now chose the size of the probes from the 
+``probes info'' submenu. The size for the probes can be either typed in or selected 
+from a file menu. The data in the file should consist of a row with the probe numbers 
+separated by single spaces in the same order given in the sample data files. For the data 
+in the BRCA example you can select ``probes info'', ``size'' and ``from file'' to browse 
+for the file size.txt. 
+
+After entering all your data remember to choose ``set up \& save'' under the file menu 
+to save your data into an Ms.R file.
+
+\section{Normalization}
+Experimental conditions and differences across probes (due to size and nature)
+can introduce systematic intensity variations that must be accounted for. We have 
+implemented four different approaches to normalize the intensities of the probes. 
+These can be accessed under the Normalize menu, once the Ms object has been 
+initially set up.
+
+The normalization procedures with and without replicas include:
+
+\begin{enumerate}
+ 
+\item \emph{sum peaks control}:  In this method normalization is achieved by dividing the 
+peak intensities by the total sum of only the intensity of the control probes. 
+
+\item \emph{sum peaks all}: Here the peak intensities are divided by 
+the total sum of all peaks intensities. 
+
+
+\item \emph{slope correction}: In this normalization option the probe intensity 
+is model as a linear function of the probe size. Extracting this dependence, a 
+normalize set of intensities is obtained.  
+
+\item \emph{nonlinear}: This procedure incorporates variability across individuals, 
+requiring data replicates. It is based on a mix model where probe intensities are modelled
+as function of the probe size, with parameters that account for maximum and asymptotic 
+values of peak intensities, together with the decay rate of intensity with probe size. 
+Each of these parameters is considered as a sum of population-averaged fixed-effects 
+and random-effects that account for individual deviations from these averages. 
+Each probe intensity is finally normalized by dividing its value by its model estimate. 
+
+\end{enumerate}
+
+Since the BRCA data has no replicates, you can only normalize it by slope correction 
+or sum of peaks options. Chose slope correction and check the results of 
+the normalization by going to the Results menu and selecting ``plot'', ``normalization''
+and ``mean controls''. The main window will display a figure with the mean normalization of 
+the intensities for the control sample, see figure (\ref{nor}); you can also check the 
+normalization for each individual test sample. In Windows environment the figure is saved on the clipboard 
+so you can paste it directly into any image processing software.  
+
+
+\begin{figure}[h]
+\begin{picture}(150,200)(0,0)
+\put(70,-40){{\resizebox{7cm}{!}{\includegraphics{figures/picture6.pdf}}}}
+\end{picture}
+\caption{Normalize reults for BRCA data.}
+\label{nor}
+\end{figure}
+
+<<echo=FALSE>>=
+Ms$norm$norm.dat<-mlpaNorm(Ms$mlpa$mlpa.dat,method="slope.correction", rep=FALSE)
+Ms$norm$type<-"slope.correction"
+Ms$norm$rep<-"FALSE"
+@
+
+\subsection{Updating Ms}
+When you normalize your data the Ms object is updated with the normalization 
+you have selected. The normalization results are stored in the Ms object;
+
+<<>>= 
+getInfo()
+@
+
+An alternative way to access the plot via the R command line is to type
+<<>>= 
+# plot(getNormalize())
+@
+that will give you additional control on the plotting parameters. 
+
+Given that the Ms object is automatically saved you can recover your session at 
+any stage by opening a previous Ms object from the File menu.
+
+\section{Analysis of Dosage Ratios}
+Once the data is normalized the inference of the dosage ratios between test and 
+control samples can be done with a variety of methods: 
+
+\begin{enumerate}
+\item \emph{Threshold}: A simple approach to define probes with gains or loses 
+in copy number. Here the ratio between the control and test samples is calculated 
+for each probe and assessed against a gain or lose thresholds (0.7, 1.33).  
+
+\item \emph{REX-MLPA}: The Regression-Enhanced MLPA computes the regression between 
+tests and controls with $(\alpha -1)$ confidence intervals. Tests probes with altered 
+copy number are identified as outliers of the confidence region. Starting with the 
+regression of only control probes the method iteratively includes the probes of the 
+sample test that are within the confidence intervals to re-estimate the regression. 
+
+\item \emph{mixel-model}: It is a method for sample replicates that accommodates
+the error in the control samples and the small number of probes typically involved.
+A probe has a different copy number for a tests sample if their
+differences with a control samples are greater than the typical difference 
+between controls. 
+
+\end{enumerate}
+
+The threshold and the REX-MLPA method can be used for the BRCA data, since they do not 
+require sample replicates. The option ``analyze'' under the ``Analysis'' menu opens 
+a window for which you can choose the method of analysis and their relevant parameters.
+
+
+<<echo=FALSE>>=
+Ms$analysis$analysis.config$method<-"threshold"
+Ms$analysis$analysis.config$bands<-"parametric"
+Ms$analysis$analysis.config$alpha<-0.05
+Ms$analysis$analysis.config$norm<- c(paste(Ms$norm$type,"; rep=",Ms$norm$rep))
+Ms$analysis$analysis.res<-mlpa(Ms$norm$norm.dat,Ms$analysis$analysis.config$method)
+@
+
+<<echo=FALSE>>=
+Ms$analysis$analysis.config$method<-"REX-MLPA"
+Ms$analysis$analysis.config$bands<-"parametric"
+Ms$analysis$analysis.config$alpha<-0.05
+Ms$analysis$analysis.config$norm<- c(paste(Ms$norm$type,"; rep=",Ms$norm$rep))
+Ms$analysis$analysis.res<-mlpa(Ms$norm$norm.dat,Ms$analysis$analysis.config$method)
+@
+
+The results of the analysis can be ploted in MLPA main window. Results for the 
+\emph{Threshold} analysis are shown in figure (\ref{th}). Plotting REX-MLPA 
+analysis produces a scattered plot of test against control
+samples for each probe, as shown in figure (\ref{REX}).
+\newline
+\begin{figure}[ht!]
+\begin{picture}(150,250)(0,0)
+\put(70,-20){{\resizebox{7cm}{!}{\includegraphics{figures/picture6_2.pdf}}}}
+\end{picture}
+\caption{Analysis Results using \emph{Threshold}, green bars indicate gains 
+while red represent copy number losses.}
+\label{th}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{picture}(150,200)(0,0)
+\put(70,-40){{\resizebox{7cm}{!}{\includegraphics{figures/picture7.pdf}}}}
+\end{picture}
+\caption{Analysis Results using \emph{REX-MLPA}.}
+\label{REX}
+\end{figure}
+
+\subsection{Results on Ms}
+The results of your analysis are stored in the Ms object that you can 
+access on a new session. You can check previous results stored in the Ms object 
+which has the following fields: 
+
+<<>>= 
+getInfo()
+@
+
+You can recover the analysis configuration typing
+<<>>=
+getConfig() 
+@
+And, the final CNV status of each probe for each test sample for such configuration 
+is obtained from the command
+<<>>=
+getResults() 
+@
+
+You can again access the plot on your R session 
+
+<<>>= 
+plot(getResults())
+@
+
+\section{MLPAstats from the command line}
+If you are comfortable with R the previous analysis can be completed with a 
+handful of steps. First, load the BRCA data with
+<<>>=
+data(BRCA)
+@
+and set it up as an object of class setupMLPA
+<<>>=
+mlpa.dat<-setupMLPA(BRCAcontrols,BRCAtests,size,probes.control)
+@.
+Second, normalize with the ``sum.peaks.controll'' option
+<<>>=
+norm.dat<-mlpaNorm(Ms$mlpa$mlpa.dat,method="sum.peaks.controls") 
+@
+and check the result plotting:
+<<>>=
+plot(norm.dat)
+@
+Finally run and plot the REX-MLPA analysis with the instructions
+<<>>=
+ans<-mlpa(norm.dat,"REX-MLPA")
+plot(ans)
+@
+You can check the final copy number assignment for each probe and test sample
+<<>>=
+ans
+@ 
+
+MLPAstats is a software package design for easy interaction with the user. Using 
+the R command line, it is possible to get results quickly and reliably. In addition, 
+the GUI offers an easy way quickly try different analysis scenarios and recover 
+your previous sessions. 
+
+\section{Acknowledgments} 
+
+This work has been partly supported by the Spanish Ministry for Science and Innovation (MTM2008-02457).
+
+
+
+\bibliographystyle{plainnat}
+\begin{thebibliography}{}
+\bibitem{jrg1} Gonzalez, J.R., Carrasco, J.L., 
+Armengol, L., Villatoro, S., Jover, L., Yasui, Y., Estivill, X. (2008) 
+Probe-specific mixed-model approach to detect copy number differences using multiplex
+ligation-dependent probe amplification.
+{\it BMC Bioinformatics}, {\bf 9}, 261.
+
+\bibitem{mav} Mavrogiannis, L.A., Cockburn, D.J. (2004) 
+GeneMaker Software for Multiplex Ligation-Dependent Probe Amplification (REX-MLPA).
+{\it Tech rep.}, Yorkshire Regional DNA laboratory [http://leedsdna.info/downloads.htm].
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,46 @@
+export(
+setupMLPA,
+mlpaNorm,
+mlpa,
+getInfo, 
+getProbesControl,
+getProbes,
+getSize,
+getPeaks,
+getConfig,
+getResults,
+getThresholds,
+getNormalize,
+gui.mlpa
+)
+
+import("nlme")
+
+S3method(print,setupMLPA)
+
+S3method(print,thresholds)
+
+S3method(plot,mlpaNorm)
+
+S3method(print,mlpa)
+S3method(plot,mlpa)
+
+
+##########################################
+# \alias{plot.mlpa1}
+# \alias{plot.mlpa1.i}
+# \alias{plot.mlpa2}
+# \alias{plot.mlpa3}
+# \alias{plot.mlpaNorm.i}
+# \alias{slope.correction}
+# \alias{iterReg}
+# \alias{iterReg.i}
+# \alias{medianFilter}
+# \alias{exponential.correction}
+# \alias{bootBands}
+# \alias{toleranceInterval}
+# \alias{get.file.menu}
+# \alias{get.normalize.menu}
+# \alias{get.mlpa.menu}
+# \alias{get.results.menu}
+# \alias{gui.sel.var.nm}
