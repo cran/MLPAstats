@@ -1,7 +1,9 @@
 `setupMLPA` <-
-function(data.controls, data.tests, size.probes, probes.control)
+function(data.controls, data.cases, size.probes, reference.probes)
  {
 
+ data.tests<-data.cases
+ probes.control<-reference.probes 
 
 # check data
  if(!identical(names(data.controls),names(data.tests)))

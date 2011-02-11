@@ -1,6 +1,8 @@
 `mlpaNorm` <-
-function(x, method="sum.peaks.controls", probes.control=TRUE, replicate=FALSE, transform="none", sliding=9, quadratic=TRUE, robust=FALSE)
+function(x, method="sum.peaks.controls", reference.probes=TRUE, replicate=FALSE, transform="none", sliding=9, quadratic=TRUE, robust=FALSE)
  {
+
+  probes.control<-reference.probes
   if(!inherits(x,"setupMLPA"))
      stop("data must be an object of class 'setupMLPA'")
 

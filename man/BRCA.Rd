@@ -1,7 +1,6 @@
 \name{BRCA}
 \alias{BRCA}
-\alias{BRCAcontrols}
-\alias{BRCAtests}
+
 
 \docType{data}
 \title{BRCA dataset for MLPA analysis }
@@ -15,8 +14,8 @@ under the ''File->load demo´´ menu.
 
 \format{
   BRCAcontrols contains data for control subjects
-  BRCAtests data for test subjects
-  probes.control numberig of the probes to be taken as internal control for normalization  
+  BRCAcases data for case subjects
+  reference.probes encodes the numberig of the probes to be taken as internal control for normalization  
   size provides size of the probes
 }
 

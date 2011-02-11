@@ -2,22 +2,16 @@
 function(x,ind=1,...)
  {
    type<-attr(x,"type.num")
+   if (!(type %in% c(1,2,3,4)))
+      type<-5
 
-   if (type==3)
-    plot.mlpa3(attr(x,"mod"),attr(x,"id"),...)  
-   else if (type==4)
-    plot.mlpa2(x,ind,...)   
-   else if (type==1)
-    {
-     plot.mlpa0(attr(x,"info"), threshold=attr(x,"threshold"))
-    }
-   else if (type==2)
-    {
-     plot.mlpa1(x,...)
-    }
+   switch(type,
+   plot.mlpa0(attr(x,"info"), threshold=attr(x,"threshold")),
+   plot.mlpa1(x,...),     
+   plot.mlpa3(attr(x,"mod"),attr(x,"id"),...),
+   plot.mlpa2(x,ind,...),
+   cat("method not implemented for this type \n"),)     
 
-   else 
-    cat("method not implemented for this type \n")
    
  }
 

@@ -7,7 +7,7 @@
 \title{mlpa - inference}
 \description{
  Performs inference of the dosage ratios between
-test and control samples with a variety of methods
+case and control samples with a variety of methods
 }
 \usage{
 mlpa(x, method, threshold = c(0.7, 1.33), gamma = 0.95, alpha = 0.01, id = 0.05, bands = "parametric", maxit = 100, B = 200)

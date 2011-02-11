@@ -10,19 +10,19 @@ call.normalize<-function(stn,rep)
 {		
 		nm.ck<-names(.GlobalEnv$Ms$mlpa$arg.mlpa)
 		if (!"cont.dat"%in%nm.ck){
-			tkmessageBox(message="load control samples",icon="error", type="ok")		
+			tkmessageBox(message="load all data, set up & save",icon="error", type="ok")		
 			stop("load control samples")}
 
 		if (!"test.dat"%in%nm.ck){
-			tkmessageBox(message="load test samples",icon="error", type="ok")
+			tkmessageBox(message="load all data, set up & save",icon="error", type="ok")
 			stop("load test samples")}
 
 		if (!"size.dat"%in%nm.ck){
-			tkmessageBox(message="load probe sizes",icon="error", type="ok")
+			tkmessageBox(message="load all data, set up & save", type="ok")
 		      stop("load probe sizes")}
 	
 		if (!"probe.dat"%in%nm.ck){
-			tkmessageBox(message="select control probes",icon="error", type="ok")
+			tkmessageBox(message="load all data, set up & save",icon="error", type="ok")
 			stop("select control probes")}
 
 		if (!"mlpa.dat"%in%names(.GlobalEnv$Ms$mlpa)){

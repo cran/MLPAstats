@@ -117,7 +117,7 @@ structure(list(Sample = structure(c(1L, 1L, 1L, 2L, 2L, 2L, 3L,
 "Replica", "RNAseP", "HIRA", "UBE3A", "ENm014", "ENm013", "SNRPN", 
 "ENm313", "ZWINT", "ENr111", "ENm323", "UBEA3A", "ENr213", "PHYLIP", 
 "ENr233", "RP11", "ENr222"), row.names = c(NA, 60L), class = "data.frame")
-`tests` <-
+`cases` <-
 structure(list(Sample = structure(c(5L, 5L, 5L, 6L, 6L, 6L, 7L, 
 7L, 7L, 8L, 8L, 8L, 9L, 9L, 9L, 3L, 3L, 3L, 4L, 4L, 4L, 1L, 1L, 
 1L, 2L, 2L, 2L), .Label = c("Autism1", "Autism2", "DiGeor1", 
@@ -175,7 +175,7 @@ structure(list(Sample = structure(c(5L, 5L, 5L, 6L, 6L, 6L, 7L,
 "Replica", "RNAseP", "HIRA", "UBE3A", "ENm014", "ENm013", "SNRPN", 
 "ENm313", "ZWINT", "ENr111", "ENm323", "UBEA3A", "ENr213", "PHYLIP", 
 "ENr233", "RP11", "ENr222"), row.names = c(NA, 27L), class = "data.frame")
-`probes.control` <-
+`reference.probes` <-
 c(1, 4, 5, 7, 9, 10, 12, 14, 16)
 `size` <-
 c(88, 91, 93, 97, 103, 109, 112, 117, 121, 124, 128, 130, 136, 

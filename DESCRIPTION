@@ -1,8 +1,8 @@
 Package: MLPAstats
 Type: Package
 Title: MLPA analysis to detect gains and loses in genes
-Version: 0.5-7
-Date: 2011-January-31
+Version: 0.5-9
+Date: 2011-February-11
 Depends: nlme, boot, tcltk, tkrplot, pixmap
 Author: Alejandro Cáceres and Juan R González
 Maintainer: Juan R González <jrgonzalez@creal.cat>
@@ -16,6 +16,6 @@ License: GPL (>= 2)
 URL: http://www.r-project.org and
         http://www.creal.cat/jrgonzalez/software.htm
 Encoding: latin1
-Packaged: 2011-01-31 16:10:31 UTC; jrgonzalez
+Packaged: 2011-02-11 13:21:51 UTC; jrgonzalez
 Repository: CRAN
-Date/Publication: 2011-01-31 17:19:40
+Date/Publication: 2011-02-11 16:14:30

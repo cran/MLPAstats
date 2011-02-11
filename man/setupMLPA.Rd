@@ -8,14 +8,14 @@
  Sets up the data ready for a normalization, from 
 }
 \usage{
-setupMLPA(data.controls, data.tests, size.probes, probes.control)
+setupMLPA(data.controls, data.cases, size.probes, reference.probes)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{data.controls}{ contains data for control subjects }
-  \item{data.tests}{ data for test subjects }
+  \item{data.cases}{ data for test subjects }
   \item{size.probes}{ provides size of the probes }
-  \item{probes.control}{ numberig of the probes to be taken as internal control for normalization }
+  \item{reference.probes}{ numberig of the probes to be taken as internal control for normalization }
 }
 \details{
    Input data should be available in the R session for an analysis from the command line. 
@@ -28,6 +28,6 @@ setupMLPA(data.controls, data.tests, size.probes, probes.control)
 
 \examples{
   data(MLPAvalidation)
-  mlpa.dat <- setupMLPA(controls, tests, size, probes.control)
+  mlpa.dat <- setupMLPA(controls, cases, size, reference.probes)
 }
 \keyword{utilities}

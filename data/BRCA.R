@@ -34,9 +34,9 @@ structure(list(id =  c("control1", "control2",
 "C4q26", "BRCA1Ex20", "BRCA1Ex21", "BRCA1Ex22", "BRCA1Ex23", 
 "BRCA1Ex24", "C11p13", "C12p13", "C3p21"), row.names = c("1", 
 "2", "3", "4", "5"), class = "data.frame")
-`BRCAtests` <-
-structure(list(id =  c("test1", "test10", "test2", "test3", "test4", 
-"test5", "test6", "test7", "test8", "test9"), 
+`BRCAcases` <-
+structure(list(id =  c("case01", "case10", "case02", "case03", "case04", 
+"case05", "case06", "case07", "case08", "case09"), 
     replicate = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), C5q31 = c(2191L, 
     1593L, 2763L, 2551L, 1967L, 2324L, 1967L, 1803L, 1803L, 1803L
     ), C6p21 = c(1825L, 1246L, 2331L, 1986L, 1645L, 1854L, 1645L, 
@@ -88,7 +88,7 @@ structure(list(id =  c("test1", "test10", "test2", "test3", "test4",
 "BRCA1Ex20", "BRCA1Ex21", "BRCA1Ex22", "BRCA1Ex23", "BRCA1Ex24", 
 "C11p13", "C12p13", "C3p21"), row.names = c("1", "2", "3", "4", 
 "5", "6", "7", "8", "9", "10"), class = "data.frame")
-`probes.control` <-
+`reference.probes` <-
 c(1, 2, 8, 14, 20, 26, 32, 33, 34)
 `size` <-
 c(127, 136, 148, 157, 166, 175, 184, 196, 208, 217, 226, 235, 

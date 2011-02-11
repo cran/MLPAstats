@@ -2,8 +2,8 @@
 # $mlpa.dat object of class mlpa computed with setupMLPA()
 # $arg.mlpa object that passes the arguments to setupMLPA() with subfields
 #		$cont.dat control data
-#		$test.dat test data
-#		$size.dat size of ...
+#		$test.dat case data
+#		$size.dat size of probes
 #		$probe.dat	probes used as control
 #		$sel.var names of probes to be used in the analysis
 
@@ -32,7 +32,7 @@ load.win<-function()
 	
 	     tkfocus(.GlobalEnv$tt)
            #select TEST
-	     tkmessageBox(message=paste("Select TEST file"))
+	     tkmessageBox(message=paste("Select CASES file"))
 
 	     #load data from file
 	     fileName<-tclvalue(tkgetOpenFile())
@@ -50,7 +50,7 @@ load.win<-function()
 	       #select variables
 	       if (length(names(cont.dat))!=length(names(test.dat)))
 	       {
-    		     tkmessageBox(message="The number of control and test variables do not match!",
+    		     tkmessageBox(message="The number of control and case probes do not match!",
 					icon="error", type="ok")
 	           tkfocus(.GlobalEnv$tt)
 	       }else{
@@ -64,7 +64,7 @@ load.win<-function()
 
 		     plot.init.loc<-.GlobalEnv$plot.init
 		     plot.init.loc$plot.status<-"report"
-		     plot.init.loc$plot.config$plot.message<-"Control and Test data loaded"
+		     plot.init.loc$plot.config$plot.message<-"Case and Control samples loaded"
 		     .GlobalEnv$plot.init<-plot.init.loc
 
 	  	     tkrreplot(.GlobalEnv$img)	 
@@ -157,7 +157,7 @@ g1<-function(){
 
 	plot.init.loc<-.GlobalEnv$plot.init
 	plot.init.loc$plot.status<-"report"
-	plot.init.loc$plot.config$plot.message<-"Control probes selected"
+	plot.init.loc$plot.config$plot.message<-"Reference probes selected"
 	.GlobalEnv$plot.init<-plot.init.loc
 
 	tkrreplot(.GlobalEnv$img)
@@ -203,7 +203,7 @@ setup<-function()
 	chk<-!c("cont.dat","test.dat","size.dat","probe.dat")%in%names(.GlobalEnv$Ms$mlpa$arg.mlpa)
 	if (sum(chk)!=0)
 	{	
-		ms<-c("load control file", "load test file", "determine size", "select control probes")
+		ms<-c("load control file", "load cases file", "determine size", "select reference probes")
 		tkmessageBox(message=ms[chk][1],icon="error", type="ok")
 		stop("load all data and parameters\n")
 	}else{	
@@ -302,10 +302,10 @@ load.demo1<-function()
 
 	mlpa<-.GlobalEnv$Ms$mlpa
 	mlpa$arg.mlpa$cont.dat<-.GlobalEnv$BRCAcontrols
-	mlpa$arg.mlpa$test.dat<-.GlobalEnv$BRCAtests
+	mlpa$arg.mlpa$test.dat<-.GlobalEnv$BRCAcases
       mlpa$arg.mlpa$size.dat<-.GlobalEnv$size
-      mlpa$arg.mlpa$probe.dat<-.GlobalEnv$probes.control
-	mlpa$mlpa.dat<-setupMLPA(.GlobalEnv$BRCAcontrols,.GlobalEnv$BRCAtests,.GlobalEnv$size,.GlobalEnv$probes.control)
+      mlpa$arg.mlpa$probe.dat<-.GlobalEnv$reference.probes
+	mlpa$mlpa.dat<-setupMLPA(.GlobalEnv$BRCAcontrols,.GlobalEnv$BRCAcases,.GlobalEnv$size,.GlobalEnv$reference.probes)
 	.GlobalEnv$Ms$mlpa<-mlpa
 
 	plot.init.loc<-.GlobalEnv$plot.init
@@ -324,10 +324,10 @@ load.demo2<-function()
 
 	mlpa<-.GlobalEnv$Ms$mlpa
 	mlpa$arg.mlpa$cont.dat<-.GlobalEnv$controls
-	mlpa$arg.mlpa$test.dat<-.GlobalEnv$tests
+	mlpa$arg.mlpa$test.dat<-.GlobalEnv$cases
       mlpa$arg.mlpa$size.dat<-.GlobalEnv$size
-      mlpa$arg.mlpa$probe.dat<-.GlobalEnv$probes.control
-	mlpa$mlpa.dat<-setupMLPA(.GlobalEnv$controls,.GlobalEnv$tests,.GlobalEnv$size,.GlobalEnv$probes.control)
+      mlpa$arg.mlpa$probe.dat<-.GlobalEnv$reference.probes
+	mlpa$mlpa.dat<-setupMLPA(.GlobalEnv$controls,.GlobalEnv$cases,.GlobalEnv$size,.GlobalEnv$reference.probes)
 	.GlobalEnv$Ms$mlpa<-mlpa
 
 	plot.init.loc<-.GlobalEnv$plot.init
@@ -353,7 +353,7 @@ tkadd(paramMenu,"cascade",label="control probes", menu=probeMenu)
 tkadd(.GlobalEnv$fileMenu,"command",label="open Ms...",command=open.mlpa )
 tkadd(.GlobalEnv$fileMenu,"cascade",label="load demo...", menu=demoMenu)
 tkadd(.GlobalEnv$fileMenu,"separator")
-tkadd(.GlobalEnv$fileMenu,"command",label="control and test data...", command=load.win)
+tkadd(.GlobalEnv$fileMenu,"command",label="control and case data...", command=load.win)
 tkadd(.GlobalEnv$fileMenu,"cascade",label="probes info...",menu=paramMenu )
 tkadd(.GlobalEnv$fileMenu,"command",label="set up & save",command=setup )
 tkadd(.GlobalEnv$fileMenu,"separator")

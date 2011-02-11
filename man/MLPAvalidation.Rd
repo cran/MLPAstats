@@ -1,9 +1,9 @@
 \name{MLPAvalidation}
 \alias{MLPAvalidation}
 \alias{controls}
-\alias{tests}
+\alias{cases}
 \alias{size}
-\alias{probes.control}
+\alias{reference.probes}
 
 \docType{data}
 \title{MLPA dataset for validation study}
@@ -17,8 +17,8 @@
 
 \format{
   controls contains data for control subjects
-  tests data for test subjects
-  probes.control numberig of the probes to be taken as internal control for normalization  
+  cases data for cases subjects
+  reference.probes codes the numberig of the probes to be taken as internal control for normalization  
   size provides size of the probes
 }
 

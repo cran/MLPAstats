@@ -56,23 +56,25 @@ get.function.plot <- function()
 		{
 		#case "select.var"
 		if (search()[2]!="plot.init$plot.config")
-			attach(.GlobalEnv$plot.init$plot.config,2)
-	 		done <-get("done",2)
+              attach(.GlobalEnv$plot.init$plot.config,2,name="plot.init$plot.config")
+
+	 	done <-get("done",2)
 
 		if(done==FALSE)
 		{	
+                   
 			params <- par(bg="white")
       		xCoords<-get("xCoords",2)
       		yCoords<-get("yCoords",2)
       		indexLabeled<-get("indexLabeled",2)
       		variable.list<-get("variable.list",2)
-      		parPlotSize<-get("parPlotSize",2)
-      		usrCoords<-get("usrCoords",2)
+      		#parPlotSize<-get("parPlotSize",2)
+      		#usrCoords<-get("usrCoords",2)
   
 			plot(xCoords,yCoords,xaxt="n",yaxt="n",bty="n",xlab="",ylab="",type="n",
 				xlim=c(0.5,4),ylim=c(-1,20))
 
-			title("MLPA stats: Select Variables",adj=0)
+			title("MLPA stats: Select reference probes",adj=0)
 		
  			if (length(indexLabeled)>0)
  			  status[indexLabeled]<-"*"
@@ -174,8 +176,22 @@ get.function.plot <- function()
 
 			tkfocus(.GlobalEnv$tt)
 		}else{
+    
+	            if (attr(.GlobalEnv$Ms$analysis$analysis.res,"type.num")%in%.GlobalEnv$plot.init$type) 
+       			plot(.GlobalEnv$Ms$analysis$analysis.res,ind=.GlobalEnv$plot.init$sub)
+                  else
+                  {
+		        tkmessageBox(message="use correct plot option!",icon="error", type="ok")
+			  xCoords<-rep(1,10)
+			  yCoords<-1:10
+			  params <- par(bg="white")
+			  plot(xCoords,yCoords,xaxt="n",yaxt="n",bty="n",xlab="",ylab="",type="n",
+				xlim=c(-1,10))
 	
-			plot(.GlobalEnv$Ms$analysis$analysis.res)
+			  title("MLPA stats: Error",adj=0) 
+			  text(1,6,paste("> use correct plot option", collapse=""),pos=4,offset=-1, cex=0.5*3/2) 
+
+                  }  
 			tkfocus(.GlobalEnv$tt)
 		}		
 		})
